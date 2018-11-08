@@ -7,9 +7,9 @@ class User extends bookshelf.Model {
   get tableName() { return 'users' };
   get hasTimestamps() { return true }
 
-  // posts() {
-  //   return this.hasMany('Post', 'author_id');
-  // }
+  photos() {
+    return this.hasMany('Photo', 'author_id');
+  }
 
 }
 

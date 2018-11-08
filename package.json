@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "npx nodemon server.js",
+    "db:seed": "POSTGRES_HOSTNAME=localhost npx knex seed:run",
     "db:migrate": "POSTGRES_HOSTNAME=LOCALHOST npx knex migrate:latest",
     "db:rollback": "POSTGRES_HOSTNAME=LOCALHOST npx knex migrate:rollback",
     "test": "echo \"Error: no test specified\" && exit 1",
