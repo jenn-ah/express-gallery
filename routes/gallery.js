@@ -12,6 +12,25 @@ router.get('/', (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get('/:id', (req, res) => {
+  let grabId = req.params.id;
+
+  return new Photo({ id: grabId })
+    .fetch({
+      columns: ['author', 'link', 'description', 'author_id']
+ //     withRelated: ['photos']
+    })
+    .then(photo => {
+      if (!photo) {
+        res.status(404).json({ message: `Photo #${grabId} not found.` });
+      } else {
+        const locals = photo.serialize();
+        res.render('galleries/detail', locals);
+      }
+    })
+    .catch(err => console.log(err));
+});
+
 router.post('/', (req, res) => {
   let data = req.body;
   data.description = data.description.toString();

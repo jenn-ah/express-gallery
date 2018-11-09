@@ -6,6 +6,7 @@ const app = express();
 const galleryRouter = require('./routes/gallery');
 const usersRouter = require('./routes/users');
 
+app.use(express.static('public'));
 app.engine('hbs', exphbs({
   defaultLayout: 'main',
   extname: 'hbs'
