@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require('./utils/auth');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const PORT = process.env.EXPRESS_HOST_PORT;
@@ -33,9 +34,9 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((userId, cb) => {
-  return new User
-    .fetch()
+  return new User()
     .where({ id: userId })
+    .fetch()
     .then(user => {
       if (!user) {
         cb(null);
@@ -46,37 +47,55 @@ passport.deserializeUser((userId, cb) => {
 
 
 passport.use(new LocalStrategy((username, password, done) => {
-  return new User
+  return new User()
+    .where({ username })
     .fetch()
-    .where({ username: username })
     .then(user => {
-      if (!user || (user.password !== password)) {
+       if (!user) {
         return done(null, false);
-      } 
-      return done(null, user);
+       }
+      let userObj = user.serialize();
+      if (userObj.password !== password) {
+        return done(null, false);
+      }
+      return done(null, userObj);
     })
     .catch(err => {
       return done(err, null);
     })
-}))
-
-
-
-
+}));
 
 app.use('/gallery', galleryRouter);
 app.use('/users', usersRouter);
 
 app.get('/', (req, res) => {
-  //res.send('users router smoke');
   return Photo.fetchAll()
     .then(photos => {
       let results = photos.toJSON();
-      //console.log('this is results', {results});
       res.render('galleries/index', { results });
     })
     .catch(err => console.log(err));
 });
+
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/success',
+  failureRedirect: '/login.html'
+}));
+
+
+app.get('/success', auth.isAuthenticated, (req, res) => {
+  const { user } = req;
+  const userObj = user.serialize();
+  res.send(`You have access: ${userObj.id} ${userObj.username}`);
+  console.log('this is userObj', userObj);
+});
+
+
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/login');
+})
 
 app.listen(PORT, () => {
   process.stdout.write(`Server listening on port: ${PORT}`);

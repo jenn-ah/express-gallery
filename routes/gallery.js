@@ -3,17 +3,6 @@ const User = require('../db/models/User');
 const Photo = require('../db/models/Photo');
 const router = express.Router();
 
-//work on displaying
-// router.get('/', (req, res) => {
-//   //res.send('users router smoke');
-//   return Photo.fetchAll()
-//     .then(photos => {
-//       let results = photos.toJSON();
-//       //console.log('this is results', {results});
-//       res.render('galleries/index', {results});
-//     })
-//     .catch(err => console.log(err));
-// });
 
 // router.get('/new', (req, res) => {
 //   //res.send('users router smoke');
@@ -45,7 +34,6 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   let data = req.body;
-  data.description = data.description.toString();
   console.log('data', data);
   return new Photo({
     author: data.author,

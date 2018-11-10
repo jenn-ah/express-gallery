@@ -3,35 +3,51 @@
 
 body {
   background-color: white;
+  margin: 70px 200px;
 }
 
-h3 {
+.formTitle {
   color: $dark-grey;
 }
 
 #header {
-  border-bottom: 1px dotted black;
+  border-bottom: 1px dotted $light-grey;
+  margin-bottom: 50px;
+  flex-flow: row wrap;
+  display: flex;
 }
 
 .headTitle {
-  font-size: 35px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 60px;
+  font-family: Open Sans;
   color: $dark-grey;
-  display: inline;
+
 }
 
 .headerText {
+  width: 300px;
+  height: 150px;
   color: $light-grey;
-  font-size: 10px;
-  font-family: Arial, Helvetica, sans-serif;
-  display: inline;
-}
+  font-size: 13px;
+  font-family: Raleway;
+  
+//   flex-wrap: wrap;
+//   float: right;
+  }
 
 .galleryViewPhoto {
   width: 380px;
   height: 270px;
   display: inline-block;
-  
+  }
+
+  #photoDetail {
+    font-family: Open Sans;
+    color: $light-grey;
+  } 
+
+  .submitBtn {
+    
   }
   
 //   .galleryViewDiv {
