@@ -41,7 +41,8 @@ router.post('/', (req, res) => {
   return new User({
     username: data.username,
     first_name: data.first_name,
-    last_name: data.last_name
+    last_name: data.last_name,
+    password: data.password
   })
     .save()
     //persists the data to the database;
