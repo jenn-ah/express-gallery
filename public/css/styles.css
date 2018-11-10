@@ -1,2 +1,25 @@
 body {
-  background-color: pink; }
+  background-color: white; }
+
+h3 {
+  color: #6f6a70; }
+
+#header {
+  border-bottom: 1px dotted black; }
+
+.headTitle {
+  font-size: 35px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #6f6a70;
+  display: inline; }
+
+.headerText {
+  color: silver;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline; }
+
+.galleryViewPhoto {
+  width: 380px;
+  height: 270px;
+  display: inline-block; }

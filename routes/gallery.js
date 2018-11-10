@@ -3,21 +3,33 @@ const User = require('../db/models/User');
 const Photo = require('../db/models/Photo');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  //res.send('users router smoke');
-  return Photo.fetchAll()
-    .then(photos => {
-      res.json(photos);
-    })
-    .catch(err => console.log(err));
-});
+//work on displaying
+// router.get('/', (req, res) => {
+//   //res.send('users router smoke');
+//   return Photo.fetchAll()
+//     .then(photos => {
+//       let results = photos.toJSON();
+//       //console.log('this is results', {results});
+//       res.render('galleries/index', {results});
+//     })
+//     .catch(err => console.log(err));
+// });
+
+// router.get('/new', (req, res) => {
+//   //res.send('users router smoke');
+//   return Photo.fetchAll()
+//     .then(photos => {
+//       res.json(photos);
+//     })
+//     .catch(err => console.log(err));
+// });
 
 router.get('/:id', (req, res) => {
   let grabId = req.params.id;
 
   return new Photo({ id: grabId })
     .fetch({
-      columns: ['author', 'link', 'description', 'author_id']
+      columns: ['author', 'link', 'description', 'author_id', 'title']
  //     withRelated: ['photos']
     })
     .then(photo => {
@@ -39,7 +51,8 @@ router.post('/', (req, res) => {
     author: data.author,
     link: data.link,
     description: data.description,
-    author_id: data.author_id
+    author_id: data.author_id, 
+    title: data.title
   })
     .save()
     //persists the data to the database;
@@ -47,6 +60,6 @@ router.post('/', (req, res) => {
       return res.json(photo);
     })
     .catch(err => console.log(err))
-})
+});
 
 module.exports = router;
