@@ -1,0 +1,14 @@
+<h1>{{username}}</h1>
+<h3>First Name: {{first_name}}</h3>
+<h3>Last Name: {{last_name}}</h3>
+
+<ul>
+  {{#each photos}}
+  <img src={{link}}>
+  <li>
+    <br>
+    {{description}}
+    <br>
+  </li>
+  {{/each}}
+</ul>
