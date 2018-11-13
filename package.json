@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "npx gulp & npx nodemon server.js",
     "db:seed": "POSTGRES_HOSTNAME=localhost npx knex seed:run",
-    "db:migrate": "POSTGRES_HOSTNAME=LOCALHOST npx knex migrate:latest",
-    "db:rollback": "POSTGRES_HOSTNAME=LOCALHOST npx knex migrate:rollback",
+    "db:migrate": "POSTGRES_HOSTNAME=localhost npx knex migrate:latest",
+    "db:rollback": "POSTGRES_HOSTNAME=localhost npx knex migrate:rollback",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
@@ -23,8 +23,10 @@
   },
   "homepage": "https://github.com/jenn-ah/express-gallery#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "bookshelf": "^0.13.3",
+    "connect-redis": "^3.4.0",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
@@ -32,7 +34,8 @@
     "knex": "^0.15.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.6.1"
+    "pg": "^7.6.1",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "browser-sync": "^2.26.3",

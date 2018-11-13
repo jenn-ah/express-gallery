@@ -11,7 +11,11 @@ const Photo = require('./db/models/Photo');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+const redis = require('connect-redis')(session);
 
+
+const saltRounds = 12;
 
 app.use(express.static('public'));
 app.engine('hbs', exphbs({
@@ -21,6 +25,7 @@ app.engine('hbs', exphbs({
 app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
+  store: new redis({ url: 'redis://redis-server:6379', logErrors: true }),
   secret: 'devLeague',
   resave: false,
   saveUninitialized: false
@@ -47,23 +52,49 @@ passport.deserializeUser((userId, cb) => {
 
 
 passport.use(new LocalStrategy((username, password, done) => {
-  return new User()
+  new User()
+
     .where({ username })
     .fetch()
     .then(user => {
-       if (!user) {
-        return done(null, false);
-       }
-      let userObj = user.serialize();
-      if (userObj.password !== password) {
-        return done(null, false);
+
+      if (!user) {
+        return done(null, false, { message: `Incorrect username/password` });
       }
-      return done(null, userObj);
-    })
-    .catch(err => {
-      return done(err, null);
-    })
+      else {
+        bcrypt.compare(password, user.password)
+          .then(res => {
+            if (res) { return done(null, user); }
+            else {
+              return done(null, false, { message: 'bad username or password' })
+            }
+          });
+      }
+    });
 }));
+
+app.get('/register', (req, res) => {
+  res.render('users/register');
+});
+
+app.post('/register', (req, res) => {
+
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.hash(req.body.password, salt, function (err, hash) {
+      new User({
+        username: req.body.username,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        password: hash
+      })
+        .save()
+        .then((user) => {
+          console.log(user);
+          res.redirect('/');
+        })
+    });
+  });
+});
 
 app.use('/gallery', galleryRouter);
 app.use('/users', usersRouter);
