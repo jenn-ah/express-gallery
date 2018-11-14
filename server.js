@@ -102,7 +102,6 @@ app.get('/', (req, res) => {
   return Photo.fetchAll()
     .then(photos => {
       let results = photos.toJSON();
-      console.log('this is results', results);
       res.render('galleries/index', { results });
     })
     .catch(err => console.log(err));

@@ -1,13 +1,16 @@
+<div class="galleryViewDiv">
 
+    {{#each results}}
 
-{{#each results}}
+    <div class="galleryViewPhoto">
+        <a href="gallery/{{id}}">
+            <img src={{link}}>
+        </a>
 
-{{!-- <div class="galleryViewDiv"> --}}
-<div class="galleryViewPhoto">
-<img src={{link}}>
-{{!-- </div> --}}
-<br>
-<li>{{description}}</li>
+        <br>
+        <b>{{title}} | www.iLoveSpongeBob.com</b>
+
+    </div>
+    {{/each}}
+
 </div>
-
-{{/each}}
