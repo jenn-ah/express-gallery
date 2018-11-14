@@ -13,6 +13,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const redis = require('connect-redis')(session);
+//const methodOverride = require('method-override');
 
 const saltRounds = 12;
 
@@ -52,16 +53,14 @@ passport.deserializeUser((userId, cb) => {
 
 passport.use(new LocalStrategy((username, password, done) => {
   new User()
-
     .where({ username })
     .fetch()
     .then(user => {
-
       if (!user) {
         return done(null, false, { message: `Incorrect username/password` });
       }
       else {
-        bcrypt.compare(password, user.password)
+        bcrypt.compare(password, user.attributes.password)
           .then(res => {
             if (res) { return done(null, user); }
             else {
@@ -77,7 +76,6 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-
   bcrypt.genSalt(saltRounds, function (err, salt) {
     bcrypt.hash(req.body.password, salt, function (err, hash) {
       new User({
@@ -107,12 +105,14 @@ app.get('/', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.get('/login', (req, res) => {
+  res.redirect('/login.html');
+});
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/success',
   failureRedirect: '/login.html'
 }));
-
 
 app.get('/success', auth.isAuthenticated, (req, res) => {
   const { user } = req;
@@ -120,7 +120,6 @@ app.get('/success', auth.isAuthenticated, (req, res) => {
   res.send(`You have access: ${userObj.id} ${userObj.username}`);
   console.log('this is userObj', userObj);
 });
-
 
 app.get('/logout', (req, res) => {
   req.logout();
