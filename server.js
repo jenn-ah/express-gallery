@@ -32,6 +32,12 @@ app.use(session({
 }));
 
 app.use(methodOverride('_method'));
+// app.use((req, res, next) => {
+//   console.log('method', req.method);
+//   console.log('path', req.path);
+//   console.log('url', req.url);
+//   next();
+// });
 app.use(passport.initialize());
 app.use(passport.session());
 

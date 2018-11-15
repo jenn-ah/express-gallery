@@ -1,7 +1,6 @@
-<h2>Edit User Information</h2>
-<form action='/users/{{id}}/edit?_method=PUT' method="post">
+<h2>Delete Photo</h2>
+<form action='/gallery/{{id}}/edit?_method=DELETE' method="post">
     <br>
-    User ID
     <span class="userId"> {{id}} </span>
     <br>
     <br> <label for="usernameEdit">Enter Username</label>
@@ -14,6 +13,6 @@
     <input type="text" id="lastNameEdit" name="last_name" value="{{last_name}}">
     <br>
     <br>
-    <button type="submit">Submit Edit</button>
+    <button type="submit">Delete</button>
 
 </form>

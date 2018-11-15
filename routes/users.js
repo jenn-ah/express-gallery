@@ -11,14 +11,12 @@ router.get('/', (req, res) => {
     .catch(err => console.log(err));
 });
 
-
 router.get('/:id', auth.isAuthenticated, (req, res) => {
   let grabId = req.params.id;
 
   if (req.user.id !== parseInt(grabId)) {
     res.redirect('/users')
   }
-
   return new User()
     .where({ id: grabId })
     .fetch({
@@ -35,11 +33,9 @@ router.get('/:id', auth.isAuthenticated, (req, res) => {
       }
     })
     .catch(err => console.log(err));
-
   //const locals = user.attributes; user.serialize({ shallow: true }); if you only want top object
-
   //hbs, res.render('users/detail', locals);
-})
+});
 
 
 router.get('/:id/edit', auth.isAuthenticated, (req, res) => {
@@ -57,7 +53,7 @@ router.get('/:id/edit', auth.isAuthenticated, (req, res) => {
       let userObj = user.serialize();
       res.render('users/edit', userObj);
     })
-    .catch()
+    .catch(err => console.error(err));
 })
 
 
@@ -83,7 +79,7 @@ router.put('/:id/edit', auth.isAuthenticated, (req, res) => {
       //let userObj = user.serialize();
       //console.log('this is user editobj', userObj);
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
 });
 
 

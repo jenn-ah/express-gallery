@@ -5,14 +5,9 @@ const router = express.Router();
 const auth = require('../utils/auth');
 
 
-// router.get('/new', (req, res) => {
-//   //res.send('users router smoke');
-//   return Photo.fetchAll()
-//     .then(photos => {
-//       res.json(photos);
-//     })
-//     .catch(err => console.log(err));
-// });
+router.get('/new', auth.isAuthenticated, (req, res) => {
+  res.render('galleries/new');
+});
 
 router.get('/:id', (req, res) => {
   let grabId = req.params.id;
@@ -20,7 +15,7 @@ router.get('/:id', (req, res) => {
   return new Photo({ id: grabId })
     .fetch({
       columns: ['author', 'link', 'description', 'author_id', 'title']
- //     withRelated: ['photos']
+      //     withRelated: ['photos']
     })
     .then(photo => {
       if (!photo) {
@@ -33,34 +28,63 @@ router.get('/:id', (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post('/', (req, res) => {
+router.post('/', auth.isAuthenticated, (req, res) => {
   let data = req.body;
   console.log('data', data);
   return new Photo({
     author: data.author,
     link: data.link,
     description: data.description,
-    author_id: data.author_id, 
+    author_id: req.user.id,
     title: data.title
   })
     .save()
     //persists the data to the database;
     .then(photo => {
-      return res.json(photo);
+      res.send('updated');
+      //return res.render('user')
     })
     .catch(err => console.log(err))
 });
 
 
-router.put('/:id', auth.isAuthenticated, (req, res) => {
-  let reqId = req.params.id;
+// router.put('/:id', auth.isAuthenticated, (req, res) => {
+//   let reqId = req.params.id;
+//   let userId = req.user.id;
+//   let accessEnabled = false;
+//     if (userId === reqId) {
+//       accessEnabled = true;
+//       res.render('users/edit', { accessEnabled });
+//     }
+//     res.send(`You are not authorized to edit this page`);
+// });
+
+
+router.delete('/:id', auth.isAuthenticated, (req, res) => {
+  let reqId = parseInt(req.params.id);
   let userId = req.user.id;
-  let accessEnabled = false;
-    if (userId === reqId) {
-      accessEnabled = true;
-      res.render('users/edit', { accessEnabled });
-    }
-    res.send(`You are not authorized to edit this page`);
+  // add delete button to user's gallery dashboard
+  //console.log('this is reqid', reqId, 'this is userid', userId);
+  return new Photo()
+    .where({ id: reqId })
+    .fetch({
+      columns: ['id', 'author_id'],
+      require: true
+    })
+    .then((photo) => {
+      let photoObj = photo.serialize();
+      if (photoObj.author_id === userId) {
+        return photo.destroy({
+          id: reqId
+        })
+      } else {
+        return res.send(`Unable to delete`);
+      }
+    })
+    .then(() => {
+      res.redirect('/');
+    })
+    .catch(err => console.error(err));
 });
 
 
