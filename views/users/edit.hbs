@@ -1,0 +1,22 @@
+<h2>Edit User Information</h2>
+<form action='/users/{{id}}/edit?_method=PUT' method="post">
+    <br>
+    Cannot Change User ID
+    <span class="userId"> {{id}} </span>
+    <br>
+    <br> <label for="usernameEdit">Enter Username</label>
+    <input type="text" id="usernameEdit" name="username" value="{{username}}">
+    <br>
+    <br> <label for="firstNameEdit">Enter First Name</label>
+    <input type="text" id="firstNameEdit" name="first_name" value="{{first_name}}">
+    <br>
+    <br> <label for="lastNameEdit">Enter Last Name</label>
+    <input type="text" id="lastNameEdit" name="last_name" value="{{last_name}}">
+    <br>
+    {{!-- <br> {{link}}
+    <input type="text" id="linkEdit" value="{{link}}">
+    <br> --}}
+    <br>
+    <button type="submit">Submit Edit</button>
+
+</form>

@@ -13,6 +13,7 @@ body {
 #header {
   border-bottom: 1px dotted $light-grey;
   margin-bottom: 0px;
+
   //margin-bottom: 50px;
   flex-flow: row wrap;
   display: flex;
@@ -22,7 +23,6 @@ body {
   font-size: 60px;
   font-family: Open Sans;
   color: $dark-grey;
-
 }
 
 .headerText {

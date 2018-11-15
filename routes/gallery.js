@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../db/models/User');
 const Photo = require('../db/models/Photo');
 const router = express.Router();
+const auth = require('../utils/auth');
 
 
 // router.get('/new', (req, res) => {
@@ -49,5 +50,18 @@ router.post('/', (req, res) => {
     })
     .catch(err => console.log(err))
 });
+
+
+router.put('/:id', auth.isAuthenticated, (req, res) => {
+  let reqId = req.params.id;
+  let userId = req.user.id;
+  let accessEnabled = false;
+    if (userId === reqId) {
+      accessEnabled = true;
+      res.render('users/edit', { accessEnabled });
+    }
+    res.send(`You are not authorized to edit this page`);
+});
+
 
 module.exports = router;

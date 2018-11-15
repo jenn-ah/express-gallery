@@ -13,7 +13,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const redis = require('connect-redis')(session);
-//const methodOverride = require('method-override');
+const methodOverride = require('method-override');
 
 const saltRounds = 12;
 
@@ -31,6 +31,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.use(methodOverride('_method'));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -110,16 +111,16 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/success',
+  successRedirect: '/users/3',
   failureRedirect: '/login.html'
 }));
 
-app.get('/success', auth.isAuthenticated, (req, res) => {
-  const { user } = req;
-  const userObj = user.serialize();
-  res.send(`You have access: ${userObj.id} ${userObj.username}`);
-  console.log('this is userObj', userObj);
-});
+// app.get('/users/:id', auth.isAuthenticated, (req, res) => {
+//   // const { user } = req;
+//   // const userObj = user.serialize();
+//   //res.send(`You have access: ${userObj.id} ${userObj.username}`);
+//   //console.log('this is userObj', userObj);
+// });
 
 app.get('/logout', (req, res) => {
   req.logout();
