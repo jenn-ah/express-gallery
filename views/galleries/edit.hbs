@@ -1,0 +1,25 @@
+<h2>Edit Photo Information</h2>
+<form action='/gallery/{{id}}/edit?_method=PUT' method="post">
+    <br>
+    <input class="authorId" type="hidden" name="author_id" value="{{author_id}}">
+    
+    <h3>{{author}}</h3>
+
+    {{!-- <br> <label for="authorEdit">Enter Author</label>
+    <input type="text" id="authorEdit" name="author" value="{{author}}">
+    <br> --}}
+    <br> <label for="linkEdit">Enter Link</label>
+    <input type="text" id="linkEdit" name="link" value="{{link}}">
+    <br>
+    <br> <label for="descEdit">Enter Description</label>
+    <input type="text" id="descEdit" name="description" value="{{description}}">
+    <br>
+
+    <br> <label for="titleEdit">Enter Title</label>
+    <input type="text" id="titleEdit" name="title" value="{{title}}">
+    <br>
+
+    <br>
+    <button type="submit">Submit Edit</button>
+
+</form>

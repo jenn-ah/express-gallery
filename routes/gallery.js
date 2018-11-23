@@ -41,23 +41,55 @@ router.post('/', auth.isAuthenticated, (req, res) => {
     .save()
     //persists the data to the database;
     .then(photo => {
-      res.send('updated');
+      return res.send('updated');
       //return res.render('user')
     })
     .catch(err => console.log(err))
 });
 
+router.get('/:id/edit', auth.isAuthenticated, (req, res) => {
+  let userId = req.user.id;
+  //let data = req.body;
+  let photoId = parseInt(req.params.id);
+  //console.log('this is userId', data);
+  if (userId === null) {
+    return res.redirect(`/gallery/${photoId}`);
+  }
+  return new Photo({ id: photoId })
+    .fetch({
+      require: true,
+      columns: ['author', 'link', 'description', 'author_id', 'title']
+    })
+    .then(photo => {
+      let photoObj = photo.serialize();
+      console.log('this is photoObj', photoObj);
+      return res.render('galleries/edit', photoObj);
+    })
+    .catch(err => console.error(err));
+});
 
-// router.put('/:id', auth.isAuthenticated, (req, res) => {
-//   let reqId = req.params.id;
-//   let userId = req.user.id;
-//   let accessEnabled = false;
-//     if (userId === reqId) {
-//       accessEnabled = true;
-//       res.render('users/edit', { accessEnabled });
-//     }
-//     res.send(`You are not authorized to edit this page`);
-// });
+router.put('/:id/edit', auth.isAuthenticated, (req, res) => {
+  let data = req.body;
+  let authId = parseInt(data.author_id);
+  let userId = req.user.id;
+  //console.log('userid', userId);
+  //console.log('this is data', data);
+  if (authId !== userId) {
+    return res.send({ message: `Incorrect photo edit for User ID:${userId}` });
+  }
+  return new Photo()
+    .where({ author_id: userId })
+    .fetch({ require: true })
+    .then(photo => {
+      photo.save({
+        link: data.link,
+        description: data.description,
+        title: data.title
+      })
+      return res.send(`Information on photo has been updated for Photo ID: ${photo.id}`);
+    })
+    .catch(err => console.log(err));
+});
 
 
 router.delete('/:id', auth.isAuthenticated, (req, res) => {
@@ -82,7 +114,7 @@ router.delete('/:id', auth.isAuthenticated, (req, res) => {
       }
     })
     .then(() => {
-      res.redirect('/');
+      return res.redirect('/');
     })
     .catch(err => console.error(err));
 });

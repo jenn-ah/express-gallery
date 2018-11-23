@@ -54,7 +54,7 @@ router.get('/:id/edit', auth.isAuthenticated, (req, res) => {
       res.render('users/edit', userObj);
     })
     .catch(err => console.error(err));
-})
+});
 
 
 router.put('/:id/edit', auth.isAuthenticated, (req, res) => {
@@ -74,10 +74,8 @@ router.put('/:id/edit', auth.isAuthenticated, (req, res) => {
         first_name: data.first_name,
         last_name: data.last_name
       })
-      res.send(`Information has been updated for User ID: ${user.id}`);
+      return res.send(`Information has been updated for User ID: ${user.id}`);
       //let userObj = user.serialize();
-      //let userObj = user.serialize();
-      //console.log('this is user editobj', userObj);
     })
     .catch(err => console.log(err));
 });
